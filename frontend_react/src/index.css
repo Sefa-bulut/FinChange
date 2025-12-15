@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Fiyat artış efekti (Yeşil) */
+.price-up {
+  background-color: #d1e7dd;
+  transition: background-color 0.2s ease-out;
+}
+
+/* Fiyat düşüş efekti (Kırmızı) */
+.price-down {
+  background-color: #f8d7da;
+  transition: background-color 0.2s ease-out;
+}
+
+/* Efektin yavaşça kaybolması için varsayılan stil */
+.price-cell {
+  transition: background-color 1s ease-in;
+}
+
+/* Ok ikonları için stiller */
+.arrow-up {
+  color: #198754;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.arrow-down {
+  color: #dc3545;
+  font-weight: bold;
+  margin-left: 8px;
+}

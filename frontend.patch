@@ -1,0 +1,1749 @@
+From 3240548efe4cec6e70b984ef183eee1f832a2f77 Mon Sep 17 00:00:00 2001
+From: sevval <sewalksn@gmail.com>
+Date: Thu, 7 Aug 2025 22:13:20 +0300
+Subject: [PATCH 1/2] =?UTF-8?q?origin/main=20ile=20birle=C5=9Ftirildi,=20g?=
+ =?UTF-8?q?eli=C5=9Ftirmeye=20devam=20ediliyor?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ frontend_react/package-lock.json              | 387 +++++++++++++++++-
+ frontend_react/package.json                   |   3 +
+ frontend_react/src/App.js                     |  53 ++-
+ .../src/components/layouts/Sidebar.js         |   9 +-
+ .../src/components/report/DonutChart.js       |  37 ++
+ .../src/components/report/ProfitLineChart.js  |  24 ++
+ frontend_react/src/pages/ReportPage.js        | 208 ++++++++++
+ frontend_react/src/services/reportService.js  | 118 ++++++
+ 8 files changed, 819 insertions(+), 20 deletions(-)
+ create mode 100644 frontend_react/src/components/report/DonutChart.js
+ create mode 100644 frontend_react/src/components/report/ProfitLineChart.js
+ create mode 100644 frontend_react/src/pages/ReportPage.js
+ create mode 100644 frontend_react/src/services/reportService.js
+
+diff --git a/frontend_react/package-lock.json b/frontend_react/package-lock.json
+index a52e9fe..c6427fb 100644
+--- a/frontend_react/package-lock.json
++++ b/frontend_react/package-lock.json
+@@ -27,12 +27,15 @@
+         "react-modal": "^3.16.1",
+         "react-router-dom": "^6.30.1",
+         "react-scripts": "5.0.1",
++        "react-select": "^5.10.2",
++        "react-select-async-paginate": "^0.7.11",
+         "react-table": "^7.8.0",
+         "react-toastify": "^11.0.5",
+         "recharts": "^2.12.0",
+         "sockjs-client": "^1.6.1",
+         "styled-components": "^6.1.8",
+         "web-vitals": "^2.1.4",
++        "xlsx": "^0.18.5",
+         "yup": "^1.4.0",
+         "zustand": "^4.5.0"
+       },
+@@ -2256,6 +2259,74 @@
+         "postcss-selector-parser": "^6.0.10"
+       }
+     },
++    "node_modules/@emotion/babel-plugin": {
++      "version": "11.13.5",
++      "resolved": "https://registry.npmjs.org/@emotion/babel-plugin/-/babel-plugin-11.13.5.tgz",
++      "integrity": "sha512-pxHCpT2ex+0q+HH91/zsdHkw/lXd468DIN2zvfvLtPKLLMo6gQj7oLObq8PhkrxOZb/gGCq03S3Z7PDhS8pduQ==",
++      "dependencies": {
++        "@babel/helper-module-imports": "^7.16.7",
++        "@babel/runtime": "^7.18.3",
++        "@emotion/hash": "^0.9.2",
++        "@emotion/memoize": "^0.9.0",
++        "@emotion/serialize": "^1.3.3",
++        "babel-plugin-macros": "^3.1.0",
++        "convert-source-map": "^1.5.0",
++        "escape-string-regexp": "^4.0.0",
++        "find-root": "^1.1.0",
++        "source-map": "^0.5.7",
++        "stylis": "4.2.0"
++      }
++    },
++    "node_modules/@emotion/babel-plugin/node_modules/@emotion/memoize": {
++      "version": "0.9.0",
++      "resolved": "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.9.0.tgz",
++      "integrity": "sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ=="
++    },
++    "node_modules/@emotion/babel-plugin/node_modules/convert-source-map": {
++      "version": "1.9.0",
++      "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.9.0.tgz",
++      "integrity": "sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A=="
++    },
++    "node_modules/@emotion/babel-plugin/node_modules/source-map": {
++      "version": "0.5.7",
++      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz",
++      "integrity": "sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
++    "node_modules/@emotion/babel-plugin/node_modules/stylis": {
++      "version": "4.2.0",
++      "resolved": "https://registry.npmjs.org/stylis/-/stylis-4.2.0.tgz",
++      "integrity": "sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw=="
++    },
++    "node_modules/@emotion/cache": {
++      "version": "11.14.0",
++      "resolved": "https://registry.npmjs.org/@emotion/cache/-/cache-11.14.0.tgz",
++      "integrity": "sha512-L/B1lc/TViYk4DcpGxtAVbx0ZyiKM5ktoIyafGkH6zg/tj+mA+NE//aPYKG0k8kCHSHVJrpLpcAlOBEXQ3SavA==",
++      "dependencies": {
++        "@emotion/memoize": "^0.9.0",
++        "@emotion/sheet": "^1.4.0",
++        "@emotion/utils": "^1.4.2",
++        "@emotion/weak-memoize": "^0.4.0",
++        "stylis": "4.2.0"
++      }
++    },
++    "node_modules/@emotion/cache/node_modules/@emotion/memoize": {
++      "version": "0.9.0",
++      "resolved": "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.9.0.tgz",
++      "integrity": "sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ=="
++    },
++    "node_modules/@emotion/cache/node_modules/stylis": {
++      "version": "4.2.0",
++      "resolved": "https://registry.npmjs.org/stylis/-/stylis-4.2.0.tgz",
++      "integrity": "sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw=="
++    },
++    "node_modules/@emotion/hash": {
++      "version": "0.9.2",
++      "resolved": "https://registry.npmjs.org/@emotion/hash/-/hash-0.9.2.tgz",
++      "integrity": "sha512-MyqliTZGuOm3+5ZRSaaBGP3USLw6+EGykkwZns2EPC5g8jJ4z9OrdZY9apkl3+UP9+sdz76YYkwCKP5gh8iY3g=="
++    },
+     "node_modules/@emotion/is-prop-valid": {
+       "version": "1.2.2",
+       "resolved": "https://registry.npmjs.org/@emotion/is-prop-valid/-/is-prop-valid-1.2.2.tgz",
+@@ -2271,12 +2342,80 @@
+       "integrity": "sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==",
+       "license": "MIT"
+     },
++    "node_modules/@emotion/react": {
++      "version": "11.14.0",
++      "resolved": "https://registry.npmjs.org/@emotion/react/-/react-11.14.0.tgz",
++      "integrity": "sha512-O000MLDBDdk/EohJPFUqvnp4qnHeYkVP5B0xEG0D/L7cOKP9kefu2DXn8dj74cQfsEzUqh+sr1RzFqiL1o+PpA==",
++      "dependencies": {
++        "@babel/runtime": "^7.18.3",
++        "@emotion/babel-plugin": "^11.13.5",
++        "@emotion/cache": "^11.14.0",
++        "@emotion/serialize": "^1.3.3",
++        "@emotion/use-insertion-effect-with-fallbacks": "^1.2.0",
++        "@emotion/utils": "^1.4.2",
++        "@emotion/weak-memoize": "^0.4.0",
++        "hoist-non-react-statics": "^3.3.1"
++      },
++      "peerDependencies": {
++        "react": ">=16.8.0"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@emotion/serialize": {
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@emotion/serialize/-/serialize-1.3.3.tgz",
++      "integrity": "sha512-EISGqt7sSNWHGI76hC7x1CksiXPahbxEOrC5RjmFRJTqLyEK9/9hZvBbiYn70dw4wuwMKiEMCUlR6ZXTSWQqxA==",
++      "dependencies": {
++        "@emotion/hash": "^0.9.2",
++        "@emotion/memoize": "^0.9.0",
++        "@emotion/unitless": "^0.10.0",
++        "@emotion/utils": "^1.4.2",
++        "csstype": "^3.0.2"
++      }
++    },
++    "node_modules/@emotion/serialize/node_modules/@emotion/memoize": {
++      "version": "0.9.0",
++      "resolved": "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.9.0.tgz",
++      "integrity": "sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ=="
++    },
++    "node_modules/@emotion/serialize/node_modules/@emotion/unitless": {
++      "version": "0.10.0",
++      "resolved": "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.10.0.tgz",
++      "integrity": "sha512-dFoMUuQA20zvtVTuxZww6OHoJYgrzfKM1t52mVySDJnMSEa08ruEvdYQbhvyu6soU+NeLVd3yKfTfT0NeV6qGg=="
++    },
++    "node_modules/@emotion/sheet": {
++      "version": "1.4.0",
++      "resolved": "https://registry.npmjs.org/@emotion/sheet/-/sheet-1.4.0.tgz",
++      "integrity": "sha512-fTBW9/8r2w3dXWYM4HCB1Rdp8NLibOw2+XELH5m5+AkWiL/KqYX6dc0kKYlaYyKjrQ6ds33MCdMPEwgs2z1rqg=="
++    },
+     "node_modules/@emotion/unitless": {
+       "version": "0.8.1",
+       "resolved": "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.8.1.tgz",
+       "integrity": "sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==",
+       "license": "MIT"
+     },
++    "node_modules/@emotion/use-insertion-effect-with-fallbacks": {
++      "version": "1.2.0",
++      "resolved": "https://registry.npmjs.org/@emotion/use-insertion-effect-with-fallbacks/-/use-insertion-effect-with-fallbacks-1.2.0.tgz",
++      "integrity": "sha512-yJMtVdH59sxi/aVJBpk9FQq+OR8ll5GT8oWd57UpeaKEVGab41JWaCFA7FRLoMLloOZF/c/wsPoe+bfGmRKgDg==",
++      "peerDependencies": {
++        "react": ">=16.8.0"
++      }
++    },
++    "node_modules/@emotion/utils": {
++      "version": "1.4.2",
++      "resolved": "https://registry.npmjs.org/@emotion/utils/-/utils-1.4.2.tgz",
++      "integrity": "sha512-3vLclRofFziIa3J2wDh9jjbkUz9qk5Vi3IZ/FSTKViB0k+ef0fPV7dYrUIugbgupYDx7v9ud/SjrtEP8Y4xLoA=="
++    },
++    "node_modules/@emotion/weak-memoize": {
++      "version": "0.4.0",
++      "resolved": "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.4.0.tgz",
++      "integrity": "sha512-snKqtPW01tN0ui7yu9rGv69aJXr/a/Ywvl11sUjNtEcRc+ng/mQriFL0wLXMef74iHa/EkftbDzU9F8iFbH+zg=="
++    },
+     "node_modules/@eslint-community/eslint-utils": {
+       "version": "4.7.0",
+       "resolved": "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.7.0.tgz",
+@@ -2348,6 +2487,28 @@
+         "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+       }
+     },
++    "node_modules/@floating-ui/core": {
++      "version": "1.7.3",
++      "resolved": "https://registry.npmjs.org/@floating-ui/core/-/core-1.7.3.tgz",
++      "integrity": "sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==",
++      "dependencies": {
++        "@floating-ui/utils": "^0.2.10"
++      }
++    },
++    "node_modules/@floating-ui/dom": {
++      "version": "1.7.3",
++      "resolved": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.7.3.tgz",
++      "integrity": "sha512-uZA413QEpNuhtb3/iIKoYMSK07keHPYeXF02Zhd6e213j+d1NamLix/mCLxBUDW/Gx52sPH2m+chlUsyaBs/Ag==",
++      "dependencies": {
++        "@floating-ui/core": "^1.7.3",
++        "@floating-ui/utils": "^0.2.10"
++      }
++    },
++    "node_modules/@floating-ui/utils": {
++      "version": "0.2.10",
++      "resolved": "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.10.tgz",
++      "integrity": "sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ=="
++    },
+     "node_modules/@hookform/resolvers": {
+       "version": "3.10.0",
+       "resolved": "https://registry.npmjs.org/@hookform/resolvers/-/resolvers-3.10.0.tgz",
+@@ -3027,6 +3188,11 @@
+       "resolved": "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.12.0.tgz",
+       "integrity": "sha512-5EwMtOqvJMMa3HbmxLlF74e+3/HhwBTMcvt3nqVJgGCozO6hzIPOBlwm8mGVNR9SN2IJpxSnlxczyDjcn7qIyw=="
+     },
++    "node_modules/@seznam/compose-react-refs": {
++      "version": "1.0.6",
++      "resolved": "https://registry.npmjs.org/@seznam/compose-react-refs/-/compose-react-refs-1.0.6.tgz",
++      "integrity": "sha512-izzOXQfeQLonzrIQb8u6LQ8dk+ymz3WXTIXjvOlTXHq6sbzROg3NWU+9TTAOpEoK9Bth24/6F/XrfHJ5yR5n6Q=="
++    },
+     "node_modules/@sinclair/typebox": {
+       "version": "0.24.51",
+       "resolved": "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.24.51.tgz",
+@@ -3051,8 +3217,7 @@
+     "node_modules/@stomp/stompjs": {
+       "version": "7.1.1",
+       "resolved": "https://registry.npmjs.org/@stomp/stompjs/-/stompjs-7.1.1.tgz",
+-      "integrity": "sha512-chcDs6YkAnKp1FqzwhGvh3i7v0+/ytzqWdKYw6XzINEKAzke/iD00dNgFPWSZEqktHOK+C1gSzXhLkLbARIaZw==",
+-      "license": "Apache-2.0"
++      "integrity": "sha512-chcDs6YkAnKp1FqzwhGvh3i7v0+/ytzqWdKYw6XzINEKAzke/iD00dNgFPWSZEqktHOK+C1gSzXhLkLbARIaZw=="
+     },
+     "node_modules/@surma/rollup-plugin-off-main-thread": {
+       "version": "2.2.3",
+@@ -3712,6 +3877,14 @@
+         "@types/react": "^18.0.0"
+       }
+     },
++    "node_modules/@types/react-transition-group": {
++      "version": "4.4.12",
++      "resolved": "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.12.tgz",
++      "integrity": "sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==",
++      "peerDependencies": {
++        "@types/react": "*"
++      }
++    },
+     "node_modules/@types/resolve": {
+       "version": "1.17.1",
+       "resolved": "https://registry.npmjs.org/@types/resolve/-/resolve-1.17.1.tgz",
+@@ -4025,6 +4198,14 @@
+       "resolved": "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.3.0.tgz",
+       "integrity": "sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g=="
+     },
++    "node_modules/@vtaits/use-lazy-ref": {
++      "version": "0.1.4",
++      "resolved": "https://registry.npmjs.org/@vtaits/use-lazy-ref/-/use-lazy-ref-0.1.4.tgz",
++      "integrity": "sha512-pdHe8k2WLIm8ccVfNw3HzeTCkifKKjVQ3hpiM7/rMynCp8nev715wrY2RCYnbeowNvekWqpGdHtrWKfCDocC6g==",
++      "peerDependencies": {
++        "react": "^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
++      }
++    },
+     "node_modules/@webassemblyjs/ast": {
+       "version": "1.14.1",
+       "resolved": "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.14.1.tgz",
+@@ -4270,6 +4451,14 @@
+         "node": ">=8.9"
+       }
+     },
++    "node_modules/adler-32": {
++      "version": "1.3.1",
++      "resolved": "https://registry.npmjs.org/adler-32/-/adler-32-1.3.1.tgz",
++      "integrity": "sha512-ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==",
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/agent-base": {
+       "version": "6.0.2",
+       "resolved": "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz",
+@@ -5317,6 +5506,18 @@
+         "node": ">=4"
+       }
+     },
++    "node_modules/cfb": {
++      "version": "1.2.2",
++      "resolved": "https://registry.npmjs.org/cfb/-/cfb-1.2.2.tgz",
++      "integrity": "sha512-KfdUZsSOw19/ObEWasvBP/Ac4reZvAGauZhs6S/gqNhXhI7cKwvlH7ulj+dOEYnca4bm4SGo8C1bTAQvnTjgQA==",
++      "dependencies": {
++        "adler-32": "~1.3.0",
++        "crc-32": "~1.2.0"
++      },
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/chalk": {
+       "version": "4.1.2",
+       "resolved": "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz",
+@@ -5530,6 +5731,14 @@
+         "node": ">=4"
+       }
+     },
++    "node_modules/codepage": {
++      "version": "1.15.0",
++      "resolved": "https://registry.npmjs.org/codepage/-/codepage-1.15.0.tgz",
++      "integrity": "sha512-3g6NUTPd/YtuuGrhMnOMRjFc+LJw/bnMp3+0r/Wcz3IXUuCosKRJvMphm5+Q+bvTVGcJJuRvVLuYba+WojaFaA==",
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/collect-v8-coverage": {
+       "version": "1.0.2",
+       "resolved": "https://registry.npmjs.org/collect-v8-coverage/-/collect-v8-coverage-1.0.2.tgz",
+@@ -5741,6 +5950,17 @@
+         "node": ">=10"
+       }
+     },
++    "node_modules/crc-32": {
++      "version": "1.2.2",
++      "resolved": "https://registry.npmjs.org/crc-32/-/crc-32-1.2.2.tgz",
++      "integrity": "sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==",
++      "bin": {
++        "crc32": "bin/crc32.njs"
++      },
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/cross-spawn": {
+       "version": "7.0.6",
+       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz",
+@@ -7957,6 +8177,11 @@
+         "url": "https://github.com/avajs/find-cache-dir?sponsor=1"
+       }
+     },
++    "node_modules/find-root": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/find-root/-/find-root-1.1.0.tgz",
++      "integrity": "sha512-NKfW6bec6GfKc0SGx1e07QZY9PE99u0Bft/0rzSD5k3sO/vwkVUpDUKVm5Gpp5Ue3YfShPFTX2070tDs5kB9Ng=="
++    },
+     "node_modules/find-up": {
+       "version": "4.1.0",
+       "resolved": "https://registry.npmjs.org/find-up/-/find-up-4.1.0.tgz",
+@@ -8161,6 +8386,14 @@
+         "node": ">= 0.6"
+       }
+     },
++    "node_modules/frac": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/frac/-/frac-1.1.2.tgz",
++      "integrity": "sha512-w/XBfkibaTl3YDqASwfDUqkna4Z2p9cFSr1aHDt0WoMTECnRfBOv2WArlZILlqgWlmdIlALXGpM2AOhEk5W3IA==",
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/fraction.js": {
+       "version": "4.3.7",
+       "resolved": "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz",
+@@ -8622,6 +8855,19 @@
+         "he": "bin/he"
+       }
+     },
++    "node_modules/hoist-non-react-statics": {
++      "version": "3.3.2",
++      "resolved": "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz",
++      "integrity": "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==",
++      "dependencies": {
++        "react-is": "^16.7.0"
++      }
++    },
++    "node_modules/hoist-non-react-statics/node_modules/react-is": {
++      "version": "16.13.1",
++      "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
++      "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
++    },
+     "node_modules/hoopy": {
+       "version": "0.1.4",
+       "resolved": "https://registry.npmjs.org/hoopy/-/hoopy-0.1.4.tgz",
+@@ -10702,6 +10948,11 @@
+         "node": ">= 8"
+       }
+     },
++    "node_modules/krustykrab": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/krustykrab/-/krustykrab-1.1.0.tgz",
++      "integrity": "sha512-xpX9MPbw+nJseewe6who9Oq46RQwrBfps+dO/N4fSjJhsf2+y4XWC2kz46oBGX8yzMHyYJj35ug0X5s5yxB6tA=="
++    },
+     "node_modules/language-subtag-registry": {
+       "version": "0.3.23",
+       "resolved": "https://registry.npmjs.org/language-subtag-registry/-/language-subtag-registry-0.3.23.tgz",
+@@ -10927,6 +11178,11 @@
+         "node": ">= 4.0.0"
+       }
+     },
++    "node_modules/memoize-one": {
++      "version": "6.0.0",
++      "resolved": "https://registry.npmjs.org/memoize-one/-/memoize-one-6.0.0.tgz",
++      "integrity": "sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw=="
++    },
+     "node_modules/merge-descriptors": {
+       "version": "1.0.3",
+       "resolved": "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-1.0.3.tgz",
+@@ -13536,6 +13792,43 @@
+         }
+       }
+     },
++    "node_modules/react-select": {
++      "version": "5.10.2",
++      "resolved": "https://registry.npmjs.org/react-select/-/react-select-5.10.2.tgz",
++      "integrity": "sha512-Z33nHdEFWq9tfnfVXaiM12rbJmk+QjFEztWLtmXqQhz6Al4UZZ9xc0wiatmGtUOCCnHN0WizL3tCMYRENX4rVQ==",
++      "dependencies": {
++        "@babel/runtime": "^7.12.0",
++        "@emotion/cache": "^11.4.0",
++        "@emotion/react": "^11.8.1",
++        "@floating-ui/dom": "^1.0.1",
++        "@types/react-transition-group": "^4.4.0",
++        "memoize-one": "^6.0.0",
++        "prop-types": "^15.6.0",
++        "react-transition-group": "^4.3.0",
++        "use-isomorphic-layout-effect": "^1.2.0"
++      },
++      "peerDependencies": {
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
++        "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
++      }
++    },
++    "node_modules/react-select-async-paginate": {
++      "version": "0.7.11",
++      "resolved": "https://registry.npmjs.org/react-select-async-paginate/-/react-select-async-paginate-0.7.11.tgz",
++      "integrity": "sha512-AjtCLPMk5DLNgygwQprEPC0gfVIjkou+QYvXM+2gm/LeRpY1Gv5KNT79EYB37H1uMCrwA+HL9BY7OtlaNWtYNg==",
++      "dependencies": {
++        "@seznam/compose-react-refs": "^1.0.6",
++        "@vtaits/use-lazy-ref": "^0.1.4",
++        "krustykrab": "^1.1.0",
++        "sleep-promise": "^9.1.0",
++        "use-is-mounted-ref": "^1.5.0",
++        "use-latest": "^1.3.0"
++      },
++      "peerDependencies": {
++        "react": "^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
++        "react-select": "^5.0.0"
++      }
++    },
+     "node_modules/react-smooth": {
+       "version": "4.0.4",
+       "resolved": "https://registry.npmjs.org/react-smooth/-/react-smooth-4.0.4.tgz",
+@@ -14566,6 +14859,11 @@
+         "node": ">=8"
+       }
+     },
++    "node_modules/sleep-promise": {
++      "version": "9.1.0",
++      "resolved": "https://registry.npmjs.org/sleep-promise/-/sleep-promise-9.1.0.tgz",
++      "integrity": "sha512-UHYzVpz9Xn8b+jikYSD6bqvf754xL2uBUzDFwiU6NcdZeifPr6UfgU43xpkPu67VMS88+TI2PSI7Eohgqf2fKA=="
++    },
+     "node_modules/sockjs": {
+       "version": "0.3.24",
+       "resolved": "https://registry.npmjs.org/sockjs/-/sockjs-0.3.24.tgz",
+@@ -14580,7 +14878,6 @@
+       "version": "1.6.1",
+       "resolved": "https://registry.npmjs.org/sockjs-client/-/sockjs-client-1.6.1.tgz",
+       "integrity": "sha512-2g0tjOR+fRs0amxENLi/q5TiJTqY+WXFOzb5UwXndlK6TO3U/mirZznpx6w34HVMoc3g7cY24yC/ZMIYnDlfkw==",
+-      "license": "MIT",
+       "dependencies": {
+         "debug": "^3.2.7",
+         "eventsource": "^2.0.2",
+@@ -14701,6 +14998,17 @@
+       "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
+       "integrity": "sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g=="
+     },
++    "node_modules/ssf": {
++      "version": "0.11.2",
++      "resolved": "https://registry.npmjs.org/ssf/-/ssf-0.11.2.tgz",
++      "integrity": "sha512-+idbmIXoYET47hH+d7dfm2epdOMUDjqcB4648sTZ+t2JwoyBFL/insLfB/racrDmsKB3diwsDA696pZMieAC5g==",
++      "dependencies": {
++        "frac": "~1.1.2"
++      },
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/stable": {
+       "version": "0.1.8",
+       "resolved": "https://registry.npmjs.org/stable/-/stable-0.1.8.tgz",
+@@ -16076,6 +16384,43 @@
+         "requires-port": "^1.0.0"
+       }
+     },
++    "node_modules/use-is-mounted-ref": {
++      "version": "1.5.0",
++      "resolved": "https://registry.npmjs.org/use-is-mounted-ref/-/use-is-mounted-ref-1.5.0.tgz",
++      "integrity": "sha512-p5FksHf/ospZUr5KU9ese6u3jp9fzvZ3wuSb50i0y6fdONaHWgmOqQtxR/PUcwi6hnhQDbNxWSg3eTK3N6m+dg==",
++      "peerDependencies": {
++        "react": ">=16.0.0"
++      }
++    },
++    "node_modules/use-isomorphic-layout-effect": {
++      "version": "1.2.1",
++      "resolved": "https://registry.npmjs.org/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.2.1.tgz",
++      "integrity": "sha512-tpZZ+EX0gaghDAiFR37hj5MgY6ZN55kLiPkJsKxBMZ6GZdOSPJXiOzPM984oPYZ5AnehYx5WQp1+ME8I/P/pRA==",
++      "peerDependencies": {
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/use-latest": {
++      "version": "1.3.0",
++      "resolved": "https://registry.npmjs.org/use-latest/-/use-latest-1.3.0.tgz",
++      "integrity": "sha512-mhg3xdm9NaM8q+gLT8KryJPnRFOz1/5XPBhmDEVZK1webPzDjrPk7f/mbpeLqTgB9msytYWANxgALOCJKnLvcQ==",
++      "dependencies": {
++        "use-isomorphic-layout-effect": "^1.1.1"
++      },
++      "peerDependencies": {
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/use-sync-external-store": {
+       "version": "1.5.0",
+       "resolved": "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz",
+@@ -16611,6 +16956,22 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/wmf": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/wmf/-/wmf-1.0.2.tgz",
++      "integrity": "sha512-/p9K7bEh0Dj6WbXg4JG0xvLQmIadrner1bi45VMJTfnbVHsc7yIajZyoSoK60/dtVBs12Fm6WkUI5/3WAVsNMw==",
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
++    "node_modules/word": {
++      "version": "0.3.0",
++      "resolved": "https://registry.npmjs.org/word/-/word-0.3.0.tgz",
++      "integrity": "sha512-OELeY0Q61OXpdUfTp+oweA/vtLVg5VDOXh+3he3PNzLGG/y0oylSOC1xRVj0+l4vQ3tj/bB1HVHv1ocXkQceFA==",
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/word-wrap": {
+       "version": "1.2.5",
+       "resolved": "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz",
+@@ -16985,6 +17346,26 @@
+         }
+       }
+     },
++    "node_modules/xlsx": {
++      "version": "0.18.5",
++      "resolved": "https://registry.npmjs.org/xlsx/-/xlsx-0.18.5.tgz",
++      "integrity": "sha512-dmg3LCjBPHZnQp5/F/+nnTa+miPJxUXB6vtk42YjBBKayDNagxGEeIdWApkYPOf3Z3pm3k62Knjzp7lMeTEtFQ==",
++      "dependencies": {
++        "adler-32": "~1.3.0",
++        "cfb": "~1.2.1",
++        "codepage": "~1.15.0",
++        "crc-32": "~1.2.1",
++        "ssf": "~0.11.2",
++        "wmf": "~1.0.1",
++        "word": "~0.3.0"
++      },
++      "bin": {
++        "xlsx": "bin/xlsx.njs"
++      },
++      "engines": {
++        "node": ">=0.8"
++      }
++    },
+     "node_modules/xml-name-validator": {
+       "version": "3.0.0",
+       "resolved": "https://registry.npmjs.org/xml-name-validator/-/xml-name-validator-3.0.0.tgz",
+diff --git a/frontend_react/package.json b/frontend_react/package.json
+index cee64e1..b1d4317 100644
+--- a/frontend_react/package.json
++++ b/frontend_react/package.json
+@@ -23,12 +23,15 @@
+     "react-modal": "^3.16.1",
+     "react-router-dom": "^6.30.1",
+     "react-scripts": "5.0.1",
++    "react-select": "^5.10.2",
++    "react-select-async-paginate": "^0.7.11",
+     "react-table": "^7.8.0",
+     "react-toastify": "^11.0.5",
+     "recharts": "^2.12.0",
+     "sockjs-client": "^1.6.1",
+     "styled-components": "^6.1.8",
+     "web-vitals": "^2.1.4",
++    "xlsx": "^0.18.5",
+     "yup": "^1.4.0",
+     "zustand": "^4.5.0"
+   },
+diff --git a/frontend_react/src/App.js b/frontend_react/src/App.js
+index df8c67d..435cffe 100644
+--- a/frontend_react/src/App.js
++++ b/frontend_react/src/App.js
+@@ -17,17 +17,16 @@ import ClientListPage from './pages/ClientListPage';
+ import ClientDetailPage from './pages/ClientDetailPage';
+ import ClientEditPage from './pages/ClientEditPage';
+ import IndividualClientFormPage from './pages/IndividualClientPage';
+-import AssetManagementPage from "./pages/AssetManagementPage";
+-import AssetListPage from "./pages/AssetListPage";
+-
+ import CorporateClientFormPage from './pages/CorporateClientPage';
++import AssetManagementPage from './pages/AssetManagementPage';
++import AssetListPage from './pages/AssetListPage';
+ import PortfolioGroupsPage from './pages/PortfolioGroupsPage';
++import ReportPage from './pages/ReportPage';
+ import CustomerAccountPage from './pages/CustomerAccountPage';
+ import CreateAccountPage from './pages/CreateAccountPage';
+ import AccountDetailPage from './pages/AccountDetailPage';
+-import MarketDataPage from "./pages/MarketDataPage";
+-import MarketWatchPage from "./pages/MarketWatchPage";
+-
++import MarketDataPage from './pages/MarketDataPage';
++import MarketWatchPage from './pages/MarketWatchPage';
+ 
+ // --- Helper Bileşenler ---
+ const ProtectedRoute = ({ children }) => {
+@@ -248,19 +247,41 @@ const AppRoutes = () => {
+       />
+ 
+           <Route
+-          path="/dashboard/market-watch"
+-          element={
+-              <ProtectedRoute>
+-                  <DashboardLayout>
+-                      <MarketWatchPage />
+-                  </DashboardLayout>
+-              </ProtectedRoute>
+-          }
+-      />
++              path="/dashboard/market-watch"
++              element={
++                  <ProtectedRoute>
++                      <DashboardLayout>
++                          <MarketWatchPage />
++                      </DashboardLayout>
++                  </ProtectedRoute>
++              }
++          />
++
++          <Route
++              path="/dashboard/portfolio-groups"
++              element={
++                  <ProtectedRoute>
++                      <DashboardLayout>
++                          <PortfolioGroupsPage />
++                      </DashboardLayout>
++                  </ProtectedRoute>
++              }
++          />
++
++          <Route
++              path="/dashboard/reports"
++              element={
++                  <ProtectedRoute>
++                      <DashboardLayout>
++                          <ReportPage />
++                      </DashboardLayout>
++                  </ProtectedRoute>
++              }
++          />
+ 
+ 
+ 
+-        {/* === Varsayılan ve Yakalama Rotaları === */}
++          {/* === Varsayılan ve Yakalama Rotaları === */}
+         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+         <Route path="*" element={<Navigate to="/login" replace />} />
+       </Routes>
+diff --git a/frontend_react/src/components/layouts/Sidebar.js b/frontend_react/src/components/layouts/Sidebar.js
+index 6f23f89..9c2e904 100644
+--- a/frontend_react/src/components/layouts/Sidebar.js
++++ b/frontend_react/src/components/layouts/Sidebar.js
+@@ -110,7 +110,14 @@ const menuConfig = [
+ 
+     ]
+   },
+-  { name: 'Hisse Alım-Satım', icon: <FaExchangeAlt />, path: '/dashboard/trading', requiredPermission: 'order:create' }
++  { name: 'Hisse Alım-Satım', icon: <FaExchangeAlt />, path: '/dashboard/trading', requiredPermission: 'order:create' },
++  {
++    name: 'Raporlama',
++    icon: <FaChartBar />,
++    path: '/dashboard/reports',
++    requiredPermission: 'client:read:all' // veya başka uygun yetki
++  }
++
+ ];
+ 
+ export default function Sidebar() {
+diff --git a/frontend_react/src/components/report/DonutChart.js b/frontend_react/src/components/report/DonutChart.js
+new file mode 100644
+index 0000000..72116f7
+--- /dev/null
++++ b/frontend_react/src/components/report/DonutChart.js
+@@ -0,0 +1,37 @@
++// components/report/DonutChart.js
++import React from 'react';
++import {
++    PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer
++} from 'recharts';
++
++const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f50', '#00c49f', '#ffbb28'];
++
++export default function DonutChart({ data }) {
++    if (!data || data.length === 0) {
++        return <p>Varlık dağılımı verisi bulunamadı.</p>;
++    }
++
++    return (
++        <ResponsiveContainer width="100%" height={300}>
++            <PieChart>
++                <Pie
++                    data={data}
++                    dataKey="value"
++                    nameKey="name"
++                    cx="50%"
++                    cy="50%"
++                    innerRadius={60}
++                    outerRadius={90}
++                    fill="#8884d8"
++                    label
++                >
++                    {data.map((entry, index) => (
++                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
++                    ))}
++                </Pie>
++                <Tooltip formatter={(value) => `${value.toLocaleString()} TL`} />
++                <Legend />
++            </PieChart>
++        </ResponsiveContainer>
++    );
++}
+diff --git a/frontend_react/src/components/report/ProfitLineChart.js b/frontend_react/src/components/report/ProfitLineChart.js
+new file mode 100644
+index 0000000..95ed01f
+--- /dev/null
++++ b/frontend_react/src/components/report/ProfitLineChart.js
+@@ -0,0 +1,24 @@
++// components/report/ProfitLineChart.js
++import React from 'react';
++import {
++    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
++} from 'recharts';
++
++export default function ProfitLineChart({ data }) {
++    if (!data || data.length === 0) {
++        return <p>Grafik verisi bulunamadı.</p>;
++    }
++
++    return (
++        <ResponsiveContainer width="100%" height={300}>
++            <LineChart data={data}>
++                <CartesianGrid strokeDasharray="3 3" />
++                <XAxis dataKey="date" />
++                <YAxis />
++                <Tooltip formatter={(value) => `${value.toLocaleString()} TL`} />
++                <Legend />
++                <Line type="monotone" dataKey="value" stroke="#8884d8" name="Kâr/Zarar" />
++            </LineChart>
++        </ResponsiveContainer>
++    );
++}
+diff --git a/frontend_react/src/pages/ReportPage.js b/frontend_react/src/pages/ReportPage.js
+new file mode 100644
+index 0000000..90133c7
+--- /dev/null
++++ b/frontend_react/src/pages/ReportPage.js
+@@ -0,0 +1,208 @@
++import React, { useState } from 'react';
++import { useAuth } from '../context/AuthContext';
++import { AsyncPaginate } from 'react-select-async-paginate';
++import DonutChart from '../components/report/DonutChart';
++import ProfitLineChart from '../components/report/ProfitLineChart';
++import { getPortfolioData, downloadExcel } from '../services/reportService';
++
++export default function ReportPage() {
++    const { token } = useAuth();
++    const [selectedClientId, setSelectedClientId] = useState('');
++    const [selectedClient, setSelectedClient] = useState(null); // 👈 eklenen state
++    const [portfolio, setPortfolio] = useState(null);
++    const [message, setMessage] = useState('');
++
++    const mockClients = [
++        { id: '1', musteriKodu: 'M123', ad: 'Ahmet', soyad: 'Yılmaz' },
++        { id: '2', musteriKodu: 'M124', ad: 'Ayşe', soyad: 'Kara' },
++        { id: '3', musteriKodu: 'M125', ad: 'Mehmet', soyad: 'Demir' },
++        { id: '4', musteriKodu: 'M126', ad: 'Zeynep', soyad: 'Çelik' },
++        { id: '5', musteriKodu: 'M127', ad: 'Ali', soyad: 'Şahin' },
++    ];
++
++    const loadClients = async (search, loadedOptions, { page }) => {
++        const pageSize = 2;
++        const start = page * pageSize;
++
++        const filtered = mockClients.filter(c => {
++            const term = search.toLowerCase();
++            return (
++                c.musteriKodu.toLowerCase().includes(term) ||
++                c.ad.toLowerCase().includes(term) ||
++                c.soyad.toLowerCase().includes(term)
++            );
++        });
++
++        const paged = filtered.slice(start, start + pageSize);
++
++        return {
++            options: paged.map((client) => ({
++                value: client.id,
++                label: `${client.musteriKodu} - ${client.ad} ${client.soyad}`,
++            })),
++            hasMore: start + pageSize < filtered.length,
++            additional: {
++                page: page + 1,
++            },
++        };
++    };
++
++    const handleClientSelect = (selected) => {
++        if (selected) {
++            const client = mockClients.find(c => c.id === selected.value);
++            setSelectedClient(client); // 👈 burada müşteri objesi tutuluyor
++            setSelectedClientId(selected.value);
++            getPortfolioData(selected.value, token)
++                .then(setPortfolio)
++                .catch(() => setMessage('Portföy verisi alınamadı'));
++        } else {
++            setSelectedClient(null);
++            setSelectedClientId('');
++            setPortfolio(null);
++        }
++    };
++
++    return (
++        <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
++            <h2 style={{ marginBottom: '1rem' }}>📊 Yönetici / Kar-Zarar Analizi ve Raporlama</h2>
++
++            {/* Müşteri Arama */}
++            <div style={{ marginBottom: '1rem' }}>
++                <label>Müşteri Arayın:</label>
++                <AsyncPaginate
++                    placeholder="Müşteri ID, ad veya soyad yazın..."
++                    loadOptions={loadClients}
++                    onChange={handleClientSelect}
++                    isClearable
++                    additional={{ page: 0 }}
++                    styles={{ container: (base) => ({ ...base, width: 350, marginTop: '8px' }) }}
++                />
++            </div>
++
++            {!selectedClientId && (
++                <p style={{ color: '#6c757d', fontStyle: 'italic' }}>
++                    Lütfen bir müşteri seçiniz.
++                </p>
++            )}
++
++            {message && <p style={{ color: 'red' }}>{message}</p>}
++
++            {portfolio && (
++                <div style={{ marginBottom: '1rem' }}>
++                    <button
++                        onClick={() => downloadExcel(selectedClient, portfolio)} // 👈 müşteri nesnesi gönderildi
++                        style={{
++                            padding: '10px 20px',
++                            backgroundColor: '#007bff',
++                            color: '#fff',
++                            border: 'none',
++                            borderRadius: '6px',
++                            cursor: 'pointer',
++                        }}
++                    >
++                        📥 Excel İndir
++                    </button>
++                </div>
++            )}
++
++            {portfolio && (
++                <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem' }}>
++                    <div style={cardStyle}>
++                        <div style={cardTitle}>Kullanılabilir Bakiye</div>
++                        <div style={cardValue}>{portfolio.balance.toLocaleString()} TL</div>
++                    </div>
++                    <div style={cardStyle}>
++                        <div style={cardTitle}>7 Günlük Kar</div>
++                        <div style={cardValue}>%{portfolio.profit7Days.percent}</div>
++                        <div style={cardSub}>+{portfolio.profit7Days.amount.toLocaleString()} TL</div>
++                    </div>
++                    <div style={cardStyle}>
++                        <div style={cardTitle}>30 Günlük Kar</div>
++                        <div style={cardValue}>%{portfolio.profit30Days.percent}</div>
++                        <div style={cardSub}>+{portfolio.profit30Days.amount.toLocaleString()} TL</div>
++                    </div>
++                </div>
++            )}
++
++            {portfolio?.assetDistribution?.length > 0 && (
++                <div style={{ marginBottom: '2rem' }}>
++                    <h4>Varlık Dağılımı</h4>
++                    <div style={{ width: '500px', height: '300px' }}>
++                        <DonutChart data={portfolio.assetDistribution} />
++                    </div>
++                </div>
++            )}
++
++            {portfolio?.profitTrend && (
++                <div style={{ marginBottom: '2rem' }}>
++                    <h4>Kâr Zaman Grafiği</h4>
++                    <div style={{ width: '100%', height: '300px' }}>
++                        <ProfitLineChart data={portfolio.profitTrend} />
++                    </div>
++                </div>
++            )}
++
++            {portfolio?.transactions?.length > 0 && (
++                <div style={{ marginTop: '2rem' }}>
++                    <h4>İşlem Geçmişi</h4>
++                    <table
++                        border="1"
++                        cellPadding="8"
++                        style={{ width: '100%', borderCollapse: 'collapse' }}
++                    >
++                        <thead style={{ backgroundColor: '#f5f5f5' }}>
++                        <tr>
++                            <th>Tarih/Saat</th>
++                            <th>Piyasa</th>
++                            <th>Segment</th>
++                            <th>İşlem Tipi</th>
++                            <th>Fiyat</th>
++                            <th>HS Kodu</th>
++                            <th>Lot Adedi</th>
++                            <th>Ort. Maliyet</th>
++                        </tr>
++                        </thead>
++                        <tbody>
++                        {portfolio.transactions.map((t, index) => (
++                            <tr key={index}>
++                                <td>{t.date}</td>
++                                <td>{t.market}</td>
++                                <td>{t.segment}</td>
++                                <td>{t.type}</td>
++                                <td>{t.price}</td>
++                                <td>{t.asset}</td>
++                                <td>{t.lot}</td>
++                                <td>{t.averageCost}</td>
++                            </tr>
++                        ))}
++                        </tbody>
++                    </table>
++                </div>
++            )}
++        </div>
++    );
++}
++
++const cardStyle = {
++    backgroundColor: '#f8f9fa',
++    padding: '1rem 2rem',
++    borderRadius: '8px',
++    boxShadow: '0 0 4px rgba(0,0,0,0.1)',
++    minWidth: '200px',
++};
++
++const cardTitle = {
++    fontSize: '14px',
++    color: '#6c757d',
++};
++
++const cardValue = {
++    fontSize: '20px',
++    fontWeight: 'bold',
++    color: '#212529',
++};
++
++const cardSub = {
++    fontSize: '12px',
++    color: '#198754',
++};
+diff --git a/frontend_react/src/services/reportService.js b/frontend_react/src/services/reportService.js
+new file mode 100644
+index 0000000..f0d9541
+--- /dev/null
++++ b/frontend_react/src/services/reportService.js
+@@ -0,0 +1,118 @@
++import * as XLSX from 'xlsx';
++
++export const getPortfolioData = async (clientId, token) => {
++    console.log(`Mock API çağrısı: Portföy verisi getiriliyor - clientId: ${clientId}`);
++    return new Promise((resolve) => {
++        setTimeout(() => {
++            resolve({
++                balance: 125000,
++                profit7Days: { percent: 2.8, amount: 3500 },
++                profit30Days: { percent: 7.1, amount: 8800 },
++                assetDistribution: [
++                    { name: 'Hisse Senedi', value: 70000 },
++                    { name: 'Eurobond', value: 30000 },
++                    { name: 'Döviz', value: 15000 },
++                    { name: 'Altın', value: 10000 },
++                ],
++                profitTrend: [
++                    { date: '2025-07-10', value: 110000 },
++                    { date: '2025-07-20', value: 117000 },
++                    { date: '2025-07-30', value: 121000 },
++                    { date: '2025-08-06', value: 125000 },
++                ],
++                transactions: [
++                    {
++                        date: '2025-08-06 11:20',
++                        market: 'BIST',
++                        segment: 'Pay Piyasası',
++                        type: 'Alış',
++                        price: 28.75,
++                        asset: 'ASELS',
++                        lot: 100,
++                        averageCost: 27.50,
++                    },
++                    {
++                        date: '2025-08-05 14:05',
++                        market: 'VİOP',
++                        segment: 'Vadeli İşlemler',
++                        type: 'Satış',
++                        price: 2300,
++                        asset: 'XU030',
++                        lot: 1,
++                        averageCost: 2250,
++                    },
++                    {
++                        date: '2025-08-01 10:00',
++                        market: 'Döviz',
++                        segment: 'Spot',
++                        type: 'Alış',
++                        price: 33.20,
++                        asset: 'USDTRY',
++                        lot: 1000,
++                        averageCost: 32.90,
++                    },
++                ],
++            });
++        }, 1000);
++    });
++};
++
++/**
++ * Seçilen portföy bilgilerine göre gerçek bir Excel dosyası indirir.
++ */
++export const downloadExcel = (client, portfolio) => {
++    if (!portfolio || !client) {
++        console.error("Portföy veya müşteri verisi eksik.");
++        return;
++    }
++
++    const summarySheet = XLSX.utils.json_to_sheet([
++        {
++            'Müşteri ID': client.id,
++            'Müşteri Kodu': client.musteriKodu,
++            'Ad Soyad': `${client.ad} ${client.soyad}`,
++            'Bakiye (₺)': portfolio.balance,
++            '7 Günlük Kar (%)': portfolio.profit7Days.percent,
++            '7 Günlük Kar (₺)': portfolio.profit7Days.amount,
++            '30 Günlük Kar (%)': portfolio.profit30Days.percent,
++            '30 Günlük Kar (₺)': portfolio.profit30Days.amount,
++        }
++    ]);
++
++    // Sayfa 2: İşlem Geçmişi
++    const transactionsSheet = XLSX.utils.json_to_sheet(
++        portfolio.transactions.map(tx => ({
++            'Tarih/Saat': tx.date,
++            'Piyasa': tx.market,
++            'Segment': tx.segment,
++            'İşlem Tipi': tx.type,
++            'Fiyat': tx.price,
++            'HS Kodu': tx.asset,
++            'Lot Adedi': tx.lot,
++            'Ort. Maliyet': tx.averageCost,
++        }))
++    );
++
++    // Excel dosyası oluşturuluyor
++    const workbook = XLSX.utils.book_new();
++    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Portföy Özeti');
++    XLSX.utils.book_append_sheet(workbook, transactionsSheet, 'İşlem Geçmişi');
++
++    const excelBuffer = XLSX.write(workbook, {
++        bookType: 'xlsx',
++        type: 'array',
++    });
++
++    const blob = new Blob([excelBuffer], {
++        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
++    });
++
++    const url = window.URL.createObjectURL(blob);
++    const link = document.createElement('a');
++    link.href = url;
++    link.setAttribute('download', `portfoy_raporu_${client.id}.xlsx`);
++    document.body.appendChild(link);
++    link.click();
++    link.remove();
++
++};
+-- 
+2.44.0
+
+
+From b6e54a41f91b1b2b912eb118edc360e887f4a316 Mon Sep 17 00:00:00 2001
+From: sevval <sewalksn@gmail.com>
+Date: Fri, 8 Aug 2025 15:23:57 +0300
+Subject: [PATCH 2/2] =?UTF-8?q?=C3=87ak=C4=B1=C5=9Fmalar=20=C3=A7=C3=B6z?=
+ =?UTF-8?q?=C3=BCld=C3=BC:=20remote=20versiyonlar=20tercih=20edildi?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../src/components/report/ProfitLineChart.js  |  17 +-
+ frontend_react/src/pages/ReportPage.js        | 290 ++++++++++--------
+ frontend_react/src/services/reportService.js  | 169 +++++-----
+ 3 files changed, 243 insertions(+), 233 deletions(-)
+
+diff --git a/frontend_react/src/components/report/ProfitLineChart.js b/frontend_react/src/components/report/ProfitLineChart.js
+index 95ed01f..26d8443 100644
+--- a/frontend_react/src/components/report/ProfitLineChart.js
++++ b/frontend_react/src/components/report/ProfitLineChart.js
+@@ -1,23 +1,28 @@
+ // components/report/ProfitLineChart.js
+ import React from 'react';
+ import {
+-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
++    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+ } from 'recharts';
+ 
+ export default function ProfitLineChart({ data }) {
+     if (!data || data.length === 0) {
+-        return <p>Grafik verisi bulunamadı.</p>;
++        return <p>Kar-Zarar verisi bulunamadı.</p>;
+     }
+ 
++    const formattedData = data.map(item => ({
++        ...item,
++        date: new Date(item.date).toLocaleDateString('tr-TR'),
++        profit: Number(item.profit),
++    }));
++
+     return (
+         <ResponsiveContainer width="100%" height={300}>
+-            <LineChart data={data}>
++            <LineChart data={formattedData}>
+                 <CartesianGrid strokeDasharray="3 3" />
+                 <XAxis dataKey="date" />
+                 <YAxis />
+-                <Tooltip formatter={(value) => `${value.toLocaleString()} TL`} />
+-                <Legend />
+-                <Line type="monotone" dataKey="value" stroke="#8884d8" name="Kâr/Zarar" />
++                <Tooltip formatter={(value) => `${value} TL`} />
++                <Line type="monotone" dataKey="profit" stroke="#8884d8" strokeWidth={2} />
+             </LineChart>
+         </ResponsiveContainer>
+     );
+diff --git a/frontend_react/src/pages/ReportPage.js b/frontend_react/src/pages/ReportPage.js
+index 90133c7..5d25e2c 100644
+--- a/frontend_react/src/pages/ReportPage.js
++++ b/frontend_react/src/pages/ReportPage.js
+@@ -1,73 +1,116 @@
+ import React, { useState } from 'react';
+ import { useAuth } from '../context/AuthContext';
+ import { AsyncPaginate } from 'react-select-async-paginate';
+-import DonutChart from '../components/report/DonutChart';
++import { getPortfolioData, downloadExcel, fetchClientOptions, getProfitLossData } from '../services/reportService';
+ import ProfitLineChart from '../components/report/ProfitLineChart';
+-import { getPortfolioData, downloadExcel } from '../services/reportService';
++import DonutChart from '../components/report/DonutChart';
+ 
+ export default function ReportPage() {
+     const { token } = useAuth();
+     const [selectedClientId, setSelectedClientId] = useState('');
+-    const [selectedClient, setSelectedClient] = useState(null); // 👈 eklenen state
++    const [selectedClient, setSelectedClient] = useState(null);
+     const [portfolio, setPortfolio] = useState(null);
+     const [message, setMessage] = useState('');
+-
+-    const mockClients = [
+-        { id: '1', musteriKodu: 'M123', ad: 'Ahmet', soyad: 'Yılmaz' },
+-        { id: '2', musteriKodu: 'M124', ad: 'Ayşe', soyad: 'Kara' },
+-        { id: '3', musteriKodu: 'M125', ad: 'Mehmet', soyad: 'Demir' },
+-        { id: '4', musteriKodu: 'M126', ad: 'Zeynep', soyad: 'Çelik' },
+-        { id: '5', musteriKodu: 'M127', ad: 'Ali', soyad: 'Şahin' },
+-    ];
++    const [profitData, setProfitData] = useState(null);
+ 
+     const loadClients = async (search, loadedOptions, { page }) => {
+-        const pageSize = 2;
+-        const start = page * pageSize;
+-
+-        const filtered = mockClients.filter(c => {
+-            const term = search.toLowerCase();
+-            return (
+-                c.musteriKodu.toLowerCase().includes(term) ||
+-                c.ad.toLowerCase().includes(term) ||
+-                c.soyad.toLowerCase().includes(term)
+-            );
+-        });
+-
+-        const paged = filtered.slice(start, start + pageSize);
+-
+-        return {
+-            options: paged.map((client) => ({
+-                value: client.id,
+-                label: `${client.musteriKodu} - ${client.ad} ${client.soyad}`,
+-            })),
+-            hasMore: start + pageSize < filtered.length,
+-            additional: {
+-                page: page + 1,
+-            },
+-        };
++        try {
++            const { options, hasMore, nextPage } = await fetchClientOptions(search, page);
++            return {
++                options: options.map(client => ({
++                    value: client.value,
++                    label: client.label,
++                    data: client.raw,
++                })),
++                hasMore,
++                additional: { page: nextPage },
++            };
++        } catch (err) {
++            console.error('Müşteri listesi alınamadı:', err);
++            return { options: [], hasMore: false, additional: { page } };
++        }
+     };
+ 
+     const handleClientSelect = (selected) => {
+         if (selected) {
+-            const client = mockClients.find(c => c.id === selected.value);
+-            setSelectedClient(client); // 👈 burada müşteri objesi tutuluyor
+-            setSelectedClientId(selected.value);
+-            getPortfolioData(selected.value, token)
+-                .then(setPortfolio)
+-                .catch(() => setMessage('Portföy verisi alınamadı'));
++            const client = selected.data;
++            setSelectedClient(client);
++            setSelectedClientId(client.id);
++            setMessage('');
++            setPortfolio(null);
++
++            getPortfolioData(client.musteriKodu)
++                .then((data) => {
++                    if (!data || !data.accounts) {
++                        setPortfolio(null);
++                        setMessage('❌ API hatası: Geçersiz veri yapısı döndü.');
++                    } else if (data.accounts.length === 0) {
++                        setPortfolio(null);
++                        setMessage('ℹ️ Bu müşteriye ait henüz portföy verisi yok.');
++                    } else {
++                        setPortfolio(data);
++                        setMessage('');
++                    }
++                })
++                .catch((err) => {
++                    console.error('API çağrısı başarısız:', err);
++                    setPortfolio(null);
++                    setMessage('🛘 Portföy verisi alınırken sunucu hatası oluştu.');
++                });
++
++            getProfitLossData(client.musteriKodu, '2025-01-01T00:00:00', '2025-12-31T23:59:59')
++                .then((data) => setProfitData(data))
++                .catch((err) => {
++                    console.error('Kar-zarar verisi alınamadı:', err);
++                    setProfitData(null);
++                });
+         } else {
+             setSelectedClient(null);
+             setSelectedClientId('');
+             setPortfolio(null);
++            setProfitData(null);
++            setMessage('');
+         }
+     };
+ 
++    const thStyle = {
++        padding: '10px',
++        fontWeight: 'bold',
++        textAlign: 'left',
++        borderBottom: '2px solid #dee2e6',
++    };
++
++    const tdStyle = {
++        padding: '10px',
++        borderBottom: '1px solid #dee2e6',
++        fontSize: '14px',
++    };
++
++    const zebraStyle = (index) => ({
++        backgroundColor: index % 2 === 0 ? '#ffffff' : '#f8f9fa',
++    });
++
++    const cardStyle = {
++        backgroundColor: '#f8f9fa',
++        padding: '1rem 2rem',
++        borderRadius: '10px',
++        boxShadow: '0 0 10px rgba(0,0,0,0.05)',
++        textAlign: 'center',
++        minWidth: '180px',
++    };
++
++    const donutData = portfolio?.balanceSummaryByCurrency
++        ? Object.entries(portfolio.balanceSummaryByCurrency).map(([currency, amount]) => ({
++            name: currency,
++            value: Number(amount),
++        }))
++        : [];
++
+     return (
+         <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
+             <h2 style={{ marginBottom: '1rem' }}>📊 Yönetici / Kar-Zarar Analizi ve Raporlama</h2>
+ 
+-            {/* Müşteri Arama */}
+-            <div style={{ marginBottom: '1rem' }}>
++            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                 <label>Müşteri Arayın:</label>
+                 <AsyncPaginate
+                     placeholder="Müşteri ID, ad veya soyad yazın..."
+@@ -77,6 +120,21 @@ export default function ReportPage() {
+                     additional={{ page: 0 }}
+                     styles={{ container: (base) => ({ ...base, width: 350, marginTop: '8px' }) }}
+                 />
++                <button
++                    onClick={() => downloadExcel(selectedClient, portfolio)}
++                    style={{
++                        padding: '10px 20px',
++                        backgroundColor: '#FF0000',
++                        color: '#fff',
++                        border: 'none',
++                        borderRadius: '6px',
++                        cursor: 'pointer',
++                        fontWeight: 'bold',
++                    }}
++                    title="Excel olarak indir"
++                >
++                    Excel İndir
++                </button>
+             </div>
+ 
+             {!selectedClientId && (
+@@ -88,121 +146,87 @@ export default function ReportPage() {
+             {message && <p style={{ color: 'red' }}>{message}</p>}
+ 
+             {portfolio && (
+-                <div style={{ marginBottom: '1rem' }}>
+-                    <button
+-                        onClick={() => downloadExcel(selectedClient, portfolio)} // 👈 müşteri nesnesi gönderildi
+-                        style={{
+-                            padding: '10px 20px',
+-                            backgroundColor: '#007bff',
+-                            color: '#fff',
+-                            border: 'none',
+-                            borderRadius: '6px',
+-                            cursor: 'pointer',
+-                        }}
+-                    >
+-                        📥 Excel İndir
+-                    </button>
+-                </div>
+-            )}
+-
+-            {portfolio && (
+-                <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem' }}>
++                <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+                     <div style={cardStyle}>
+-                        <div style={cardTitle}>Kullanılabilir Bakiye</div>
+-                        <div style={cardValue}>{portfolio.balance.toLocaleString()} TL</div>
++                        <div style={{ fontSize: '14px', color: '#6c757d' }}>Toplam Hesap</div>
++                        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{portfolio.totalAccountCount}</div>
+                     </div>
+                     <div style={cardStyle}>
+-                        <div style={cardTitle}>7 Günlük Kar</div>
+-                        <div style={cardValue}>%{portfolio.profit7Days.percent}</div>
+-                        <div style={cardSub}>+{portfolio.profit7Days.amount.toLocaleString()} TL</div>
+-                    </div>
+-                    <div style={cardStyle}>
+-                        <div style={cardTitle}>30 Günlük Kar</div>
+-                        <div style={cardValue}>%{portfolio.profit30Days.percent}</div>
+-                        <div style={cardSub}>+{portfolio.profit30Days.amount.toLocaleString()} TL</div>
++                        <div style={{ fontSize: '14px', color: '#6c757d' }}>Rapor Tarihi</div>
++                        <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{new Date(portfolio.reportGeneratedAt).toLocaleString()}</div>
+                     </div>
+                 </div>
+             )}
+ 
+-            {portfolio?.assetDistribution?.length > 0 && (
+-                <div style={{ marginBottom: '2rem' }}>
+-                    <h4>Varlık Dağılımı</h4>
+-                    <div style={{ width: '500px', height: '300px' }}>
+-                        <DonutChart data={portfolio.assetDistribution} />
+-                    </div>
++            {donutData.length > 0 && (
++                <div style={{ marginBottom: '3rem' }}>
++                    <h4>💰 Varlık Dağılımı (Donut)</h4>
++                    <DonutChart data={donutData} />
+                 </div>
+             )}
+ 
+-            {portfolio?.profitTrend && (
++            {portfolio?.balanceSummaryByCurrency && (
+                 <div style={{ marginBottom: '2rem' }}>
+-                    <h4>Kâr Zaman Grafiği</h4>
+-                    <div style={{ width: '100%', height: '300px' }}>
+-                        <ProfitLineChart data={portfolio.profitTrend} />
+-                    </div>
++                    <h4>Para Birimi Bazında Bakiye</h4>
++                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
++                        <thead style={{ backgroundColor: '#f1f3f5' }}>
++                        <tr>
++                            <th style={thStyle}>Para Birimi</th>
++                            <th style={thStyle}>Toplam Bakiye</th>
++                        </tr>
++                        </thead>
++                        <tbody>
++                        {Object.entries(portfolio.balanceSummaryByCurrency).map(([currency, amount]) => (
++                            <tr key={currency}>
++                                <td style={tdStyle}>{currency}</td>
++                                <td style={{ ...tdStyle, textAlign: 'right' }}>{amount.toLocaleString()}</td>
++                            </tr>
++                        ))}
++                        </tbody>
++                    </table>
+                 </div>
+             )}
+ 
+-            {portfolio?.transactions?.length > 0 && (
++            {portfolio?.accounts?.length > 0 && (
+                 <div style={{ marginTop: '2rem' }}>
+-                    <h4>İşlem Geçmişi</h4>
+-                    <table
+-                        border="1"
+-                        cellPadding="8"
+-                        style={{ width: '100%', borderCollapse: 'collapse' }}
+-                    >
++                    <h4>Hesap Listesi</h4>
++                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                         <thead style={{ backgroundColor: '#f5f5f5' }}>
+                         <tr>
+-                            <th>Tarih/Saat</th>
+-                            <th>Piyasa</th>
+-                            <th>Segment</th>
+-                            <th>İşlem Tipi</th>
+-                            <th>Fiyat</th>
+-                            <th>HS Kodu</th>
+-                            <th>Lot Adedi</th>
+-                            <th>Ort. Maliyet</th>
++                            <th style={thStyle}>Hesap No</th>
++                            <th style={thStyle}>Hesap Adı</th>
++                            <th style={thStyle}>Para Birimi</th>
++                            <th style={thStyle}>Bakiye</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+-                        {portfolio.transactions.map((t, index) => (
+-                            <tr key={index}>
+-                                <td>{t.date}</td>
+-                                <td>{t.market}</td>
+-                                <td>{t.segment}</td>
+-                                <td>{t.type}</td>
+-                                <td>{t.price}</td>
+-                                <td>{t.asset}</td>
+-                                <td>{t.lot}</td>
+-                                <td>{t.averageCost}</td>
++                        {portfolio.accounts.map((acc, index) => (
++                            <tr key={index} style={zebraStyle(index)}>
++                                <td style={tdStyle}>{acc.accountNumber}</td>
++                                <td style={tdStyle}>{acc.accountName}</td>
++                                <td style={tdStyle}>{acc.currency}</td>
++                                <td style={{ ...tdStyle, textAlign: 'right' }}>{acc.balance.toLocaleString()}</td>
+                             </tr>
+                         ))}
+                         </tbody>
+                     </table>
+                 </div>
+             )}
++
++            {selectedClientId && portfolio && (
++                <div style={{ marginTop: '3rem' }}>
++                    <h4>📉 Kar-Zarar Eğrisi</h4>
++                    {profitData && profitData.length > 0 ? (
++                        <ProfitLineChart data={profitData} />
++                    ) : (
++                        <p style={{ color: '#6c757d', fontStyle: 'italic' }}>
++                            Bu müşteriye ait kar-zarar verisi bulunmamaktadır.
++                        </p>
++                    )}
++                </div>
++            )}
++
++
+         </div>
+     );
+-}
+-
+-const cardStyle = {
+-    backgroundColor: '#f8f9fa',
+-    padding: '1rem 2rem',
+-    borderRadius: '8px',
+-    boxShadow: '0 0 4px rgba(0,0,0,0.1)',
+-    minWidth: '200px',
+-};
+-
+-const cardTitle = {
+-    fontSize: '14px',
+-    color: '#6c757d',
+-};
+-
+-const cardValue = {
+-    fontSize: '20px',
+-    fontWeight: 'bold',
+-    color: '#212529',
+-};
+-
+-const cardSub = {
+-    fontSize: '12px',
+-    color: '#198754',
+-};
++}
+\ No newline at end of file
+diff --git a/frontend_react/src/services/reportService.js b/frontend_react/src/services/reportService.js
+index f0d9541..6f4d9e6 100644
+--- a/frontend_react/src/services/reportService.js
++++ b/frontend_react/src/services/reportService.js
+@@ -1,118 +1,99 @@
++import api from './api';
+ import * as XLSX from 'xlsx';
+ 
+-export const getPortfolioData = async (clientId, token) => {
+-    console.log(`Mock API çağrısı: Portföy verisi getiriliyor - clientId: ${clientId}`);
+-    return new Promise((resolve) => {
+-        setTimeout(() => {
+-            resolve({
+-                balance: 125000,
+-                profit7Days: { percent: 2.8, amount: 3500 },
+-                profit30Days: { percent: 7.1, amount: 8800 },
+-                assetDistribution: [
+-                    { name: 'Hisse Senedi', value: 70000 },
+-                    { name: 'Eurobond', value: 30000 },
+-                    { name: 'Döviz', value: 15000 },
+-                    { name: 'Altın', value: 10000 },
+-                ],
+-                profitTrend: [
+-                    { date: '2025-07-10', value: 110000 },
+-                    { date: '2025-07-20', value: 117000 },
+-                    { date: '2025-07-30', value: 121000 },
+-                    { date: '2025-08-06', value: 125000 },
+-                ],
+-                transactions: [
+-                    {
+-                        date: '2025-08-06 11:20',
+-                        market: 'BIST',
+-                        segment: 'Pay Piyasası',
+-                        type: 'Alış',
+-                        price: 28.75,
+-                        asset: 'ASELS',
+-                        lot: 100,
+-                        averageCost: 27.50,
+-                    },
+-                    {
+-                        date: '2025-08-05 14:05',
+-                        market: 'VİOP',
+-                        segment: 'Vadeli İşlemler',
+-                        type: 'Satış',
+-                        price: 2300,
+-                        asset: 'XU030',
+-                        lot: 1,
+-                        averageCost: 2250,
+-                    },
+-                    {
+-                        date: '2025-08-01 10:00',
+-                        market: 'Döviz',
+-                        segment: 'Spot',
+-                        type: 'Alış',
+-                        price: 33.20,
+-                        asset: 'USDTRY',
+-                        lot: 1000,
+-                        averageCost: 32.90,
+-                    },
+-                ],
+-            });
+-        }, 1000);
+-    });
++//  Müşteri portföy verisini al
++export const getPortfolioData = async (customerCode) => {
++    const response = await api.get(`/report/customer/${customerCode}`);
++    return response.result;
+ };
+ 
+-/**
+- * Seçilen portföy bilgilerine göre gerçek bir Excel dosyası indirir.
+- */
+-export const downloadExcel = (client, portfolio) => {
+-    if (!portfolio || !client) {
+-        console.error("Portföy veya müşteri verisi eksik.");
+-        return;
++//  Müşteri arama için sayfalı ve filtreli veri
++export const fetchClientOptions = async (search = '', page = 0, pageSize = 10) => {
++    try {
++        const response = await api.get('/clients'); // tüm müşterileri getir
++        const allClients = response.result;
++
++        const term = search.toLowerCase();
++        const filtered = allClients.filter(client =>
++            client.musteriKodu.toLowerCase().includes(term) ||
++            (client.ad && client.ad.toLowerCase().includes(term)) ||
++            (client.soyad && client.soyad.toLowerCase().includes(term))
++        );
++
++        const paged = filtered.slice(page * pageSize, (page + 1) * pageSize);
++        const options = paged.map(client => ({
++            value: client.id,
++            label: `${client.musteriKodu} - ${client.ad || ''} ${client.soyad || ''}`,
++            raw: client,
++        }));
++
++        return {
++            options,
++            hasMore: (page + 1) * pageSize < filtered.length,
++            nextPage: page + 1,
++        };
++    } catch (error) {
++        console.error('fetchClientOptions hata:', error);
++        return { options: [], hasMore: false, nextPage: page };
+     }
++};
+ 
+-    const summarySheet = XLSX.utils.json_to_sheet([
++// Kar-Zarar verisini getir
++export const getProfitLossData = async (musteriKodu, start, end) => {
++    const response = await api.get(`/report/profit-loss`, {
++        params: { musteriKodu, start, end }, // 👈 parametre adı 'musteriKodu' olmalı
++    });
++    return response.result;
++};
++
++
++// 📥 Excel indirici
++export const downloadExcel = (client, report) => {
++    if (!client || !report) return;
++
++    const summaryData = [
+         {
+-            'Müşteri ID': client.id,
+             'Müşteri Kodu': client.musteriKodu,
+-            'Ad Soyad': `${client.ad} ${client.soyad}`,
+-            'Bakiye (₺)': portfolio.balance,
+-            '7 Günlük Kar (%)': portfolio.profit7Days.percent,
+-            '7 Günlük Kar (₺)': portfolio.profit7Days.amount,
+-            '30 Günlük Kar (%)': portfolio.profit30Days.percent,
+-            '30 Günlük Kar (₺)': portfolio.profit30Days.amount,
+-        }
+-    ]);
++            'Ad Soyad / Ünvan': client.ad
++                ? `${client.ad} ${client.soyad}`
++                : client.sirketUnvani,
++            'Müşteri Tipi': report.customerInfo.customerType,
++            'Hesap Sayısı': report.totalAccountCount,
++            'Rapor Tarihi': new Date(report.reportGeneratedAt).toLocaleString(),
++        },
++    ];
+ 
+-    // Sayfa 2: İşlem Geçmişi
+-    const transactionsSheet = XLSX.utils.json_to_sheet(
+-        portfolio.transactions.map(tx => ({
+-            'Tarih/Saat': tx.date,
+-            'Piyasa': tx.market,
+-            'Segment': tx.segment,
+-            'İşlem Tipi': tx.type,
+-            'Fiyat': tx.price,
+-            'HS Kodu': tx.asset,
+-            'Lot Adedi': tx.lot,
+-            'Ort. Maliyet': tx.averageCost,
+-        }))
++    const currencySummary = Object.entries(report.balanceSummaryByCurrency || {}).map(
++        ([currency, amount]) => ({
++            'Para Birimi': currency,
++            'Toplam Bakiye': amount,
++        })
+     );
+ 
+-    // Excel dosyası oluşturuluyor
++    const accounts = (report.accounts || []).map((acc) => ({
++        'Hesap No': acc.accountNumber,
++        'Hesap Adı': acc.accountName,
++        'Para Birimi': acc.currency,
++        'Bakiye': acc.balance,
++    }));
++
+     const workbook = XLSX.utils.book_new();
+-    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Portföy Özeti');
+-    XLSX.utils.book_append_sheet(workbook, transactionsSheet, 'İşlem Geçmişi');
++    const summarySheet = XLSX.utils.json_to_sheet([...summaryData, {}, ...currencySummary]);
++    const accountsSheet = XLSX.utils.json_to_sheet(accounts);
+ 
+-    const excelBuffer = XLSX.write(workbook, {
+-        bookType: 'xlsx',
+-        type: 'array',
+-    });
++    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Rapor Özeti');
++    XLSX.utils.book_append_sheet(workbook, accountsSheet, 'Hesaplar');
+ 
++    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+     const blob = new Blob([excelBuffer], {
+         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+     });
+ 
+-    const url = window.URL.createObjectURL(blob);
++    const url = URL.createObjectURL(blob);
+     const link = document.createElement('a');
+     link.href = url;
+-    link.setAttribute('download', `portfoy_raporu_${client.id}.xlsx`);
++    link.setAttribute('download', `rapor_${client.musteriKodu}.xlsx`);
+     document.body.appendChild(link);
+     link.click();
+     link.remove();
+-
+ };
+-- 
+2.44.0
+
